@@ -1,6 +1,5 @@
 # Emulate interfaces in python
 """An interface defines the required methods a subclass has to have"""
-"""In this snippet, we are using inheritance to apply these requirements"""
 
 
 def get_methods(Class):
@@ -16,27 +15,27 @@ class InterfaceError(Exception):
     """Raised when an interface error occurs from a subclass"""
 
     def __init__(self, message):
-        """Do something before super class is called"""
+        """You can do something before super class is called"""
         super().__init__(message)
 
 
-class Entity:
-
-    methods = {"handle_mouse_up", "handle_mouse_down"}
-
-    def __init__(self):
-        difference = Entity.methods.difference(get_methods(self.__class__))
-        print(Entity.methods)
+class Interface:
+    def __init__(self, _class):
+        difference = self.methods.difference(get_methods(_class.__class__))
         if difference:
             raise InterfaceError(
-                f"Method(s) {difference} not found in class {self.__class__.__name__}"
+                f"Method(s) {difference} not found in interface: {self.__class__.__name__}"
             )
 
 
-class Ball(Entity):
+class EntityInterface(Interface):
+    methods = {"handle_mouse_up", "handle_mouse_down"}
+
+
+class Ball:
     def __init__(self):
-        super().__init__()
-        pass
+        """Link this class to an interface"""
+        EntityInterface(self)
 
     def handle_mouse_down(self):
         print("mouse down has been pressed")
