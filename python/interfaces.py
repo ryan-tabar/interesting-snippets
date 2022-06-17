@@ -12,7 +12,7 @@ def get_methods(Class):
 
 
 class InterfaceError(Exception):
-    """Raised when an interface error occurs from a subclass"""
+    """Raised when an interface error occurs"""
 
     def __init__(self, message):
         """You can do something before super class is called"""
@@ -20,8 +20,9 @@ class InterfaceError(Exception):
 
 
 class Interface:
+    """An Interface class to be inherited from"""
     def __init__(self, _class):
-        difference = self.methods.difference(get_methods(_class.__class__))
+        difference = self.methods.difference(get_methods(_class))
         if difference:
             raise InterfaceError(
                 f"Method(s) {difference} not found in interface: {self.__class__.__name__}"
@@ -29,17 +30,19 @@ class Interface:
 
 
 class EntityInterface(Interface):
+    """Create an interface with a set called: methods"""
     methods = {"handle_mouse_up", "handle_mouse_down"}
 
+class Ball():
 
-class Ball:
     def __init__(self):
-        """Link this class to an interface"""
-        EntityInterface(self)
+        pass
 
     def handle_mouse_down(self):
         print("mouse down has been pressed")
 
+# Link Ball class to interface
+EntityInterface(Ball)
 
 ball = Ball()
 ball.handle_mouse_down()
