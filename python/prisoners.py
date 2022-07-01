@@ -15,11 +15,11 @@ for _ in range(SIMULATIONS):
     boxes = random.sample(range(PRISONERS), PRISONERS)
     for prisoner in range(PRISONERS):
         box = boxes[prisoner]
-        checked = set()
+        checked = 0
         while box != prisoner:
-            checked.add(box)
+            checked += 1
             box = boxes[box]
-        if len(checked) > TRIES:
+        if checked > TRIES:
             break
     else:
         successes += 1
