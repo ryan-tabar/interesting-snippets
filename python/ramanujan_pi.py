@@ -11,7 +11,13 @@ def summation(N):
         total += numerator / denominator
     return total
 
-constant = 2 * m.sqrt(2) / 9801
-result = constant * summation(20)
-result = 1 / result
-print(result)
+def pi(N):
+    constant = 2 * m.sqrt(2) / 9801
+    result = constant * summation(N)
+    return 1 / result
+
+def print_pi(N):
+    result = pi(N)
+    print(f"result: {result}, accuracy: {m.pi/result:.15%}")
+
+print_pi(2)
