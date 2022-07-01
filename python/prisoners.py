@@ -15,7 +15,7 @@ for _ in range(SIMULATIONS):
     boxes = random.sample(range(PRISONERS), PRISONERS)
     for prisoner in range(PRISONERS):
         box = boxes[prisoner]
-        checked = 0
+        checked = 1
         while box != prisoner:
             checked += 1
             box = boxes[box]
