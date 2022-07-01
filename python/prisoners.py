@@ -16,7 +16,7 @@ for _ in range(SIMULATIONS):
     for prisoner in range(PRISONERS):
         box = boxes[prisoner]
         checked = set()
-        while box != prisoner and box not in checked:
+        while box != prisoner:
             checked.add(box)
             box = boxes[box]
         if len(checked) > TRIES:
