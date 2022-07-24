@@ -12,6 +12,7 @@ def memoize(original_function):
     wrapper.__name__ = original_function.__name__
     return wrapper
 
+
 # Example on the fibonacci sequence
 if __name__ == "__main__":
 
