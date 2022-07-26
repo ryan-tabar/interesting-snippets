@@ -1,5 +1,6 @@
 #include <iostream>
 #include <array>
+
 constexpr unsigned int ROWS = 7;
 constexpr unsigned int COLS = 7;
 constexpr unsigned int MAX_ROW = ROWS - 1;
@@ -21,14 +22,14 @@ void printBoard(const BoardArray& board) {
 	std::cout << "------------" << std::endl;
 }
 
-Directions getDirections(const unsigned int row, const unsigned int col, const unsigned int delta) {
-	return { {{row - delta, col},
-			  {row + delta, col},
-			  {row, col - delta},
-			  {row, col + delta}} };
+Directions&& getDirections(const unsigned int row, const unsigned int col, const unsigned int delta) {
+	return {{{row - delta, col},
+			 {row + delta, col},
+			 {row, col - delta},
+			 {row, col + delta}}};
 }
 
-bool doMoves(const BoardArray& board, const int jumpsToComplete) {
+bool doMoves(const BoardArray& board, const unsigned int jumpsToComplete) {
 	// winning condition
 	if (jumpsToComplete == 0 && board[ROW_WIN][COL_WIN] == 'o') {
 		return true;
@@ -37,37 +38,33 @@ bool doMoves(const BoardArray& board, const int jumpsToComplete) {
 	// for every piece on the board
 	for (int row = 0; row < ROWS; ++row) {
 		for (int col = 0; col < COLS; ++col) {
-			// skip if no ball
+			// skip if not a ball
 			if (board[row][col] != 'o') {
 				continue;
 			}
 
-			// define jumps
-			unsigned int delta = 1;
-			const Directions jumpOvers = getDirections(row, col, delta);
-
-			delta = 2;
-			const Directions jumpTos = getDirections(row, col, delta);
+			// define directions to jump over/to
+			const Directions jumpOvers = getDirections(row, col, 1);
+			const Directions jumpTos = getDirections(row, col, 2);
 
 			// for every direction
 			for (int i = 0; i < DIRECTIONS; ++i) {
 				// skip if out of index range
-				if (jumpTos[i].first < 0 || 
-					jumpTos[i].first > MAX_ROW || 
-					jumpTos[i].second < 0 || 
+				if (jumpTos[i].first < 0 ||
+					jumpTos[i].first > MAX_ROW ||
+					jumpTos[i].second < 0 ||
 					jumpTos[i].second > MAX_COL) {
 					continue;
 				}
-				
-				// copy board
+
 				BoardArray copiedBoard = board;
 
-				// define cells
+				// define current hole and holes to jump over/to
 				char& current = copiedBoard[row][col];
 				char& jumpOver = copiedBoard[jumpOvers[i].first][jumpOvers[i].second];
 				char& jumpTo = copiedBoard[jumpTos[i].first][jumpTos[i].second];
 
-				// if there's a ball to jump over and an empty spot after it
+				// if there's a ball to jump over and an empty hole after it
 				if (jumpOver == 'o' && jumpTo == ' ') {
 					// make the jump
 					current = ' ';
@@ -82,22 +79,26 @@ bool doMoves(const BoardArray& board, const int jumpsToComplete) {
 
 		}
 	}
+	// return false as no moves are available
 	return false;
 }
 
 int main() {
-	BoardArray board =
-    {{{ 'x', 'x', 'o', 'o', 'o', 'x', 'x' },
-      { 'x', 'x', 'o', 'o', 'o', 'x', 'x' },
-	  { 'o', 'o', 'o', 'o', 'o', 'o', 'o' },
-	  { 'o', 'o', 'o', ' ', 'o', 'o', 'o' },
-	  { 'o', 'o', 'o', 'o', 'o', 'o', 'o' },
-	  { 'x', 'x', 'o', 'o', 'o', 'x', 'x' },
-	  { 'x', 'x', 'o', 'o', 'o', 'x', 'x' }}};
+	const BoardArray board = {{
+	{ 'x', 'x', 'o', 'o', 'o', 'x', 'x' },
+	{ 'x', 'x', 'o', 'o', 'o', 'x', 'x' },
+	{ 'o', 'o', 'o', 'o', 'o', 'o', 'o' },
+	{ 'o', 'o', 'o', ' ', 'o', 'o', 'o' },
+	{ 'o', 'o', 'o', 'o', 'o', 'o', 'o' },
+	{ 'x', 'x', 'o', 'o', 'o', 'x', 'x' },
+	{ 'x', 'x', 'o', 'o', 'o', 'x', 'x' }}};
 
-	const unsigned int jumpsToComplete = 31;
-	doMoves(board, jumpsToComplete);
+	const unsigned int JUMPS_TO_COMPLETE = 31;
+
+	std::cout << "Solving..." << std::endl;
+	doMoves(board, JUMPS_TO_COMPLETE);
 	printBoard(board);
+	std::cout << "Solution Found!" << std::endl;
 
 	return 0;
 }
