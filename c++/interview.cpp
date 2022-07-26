@@ -10,7 +10,8 @@ constexpr unsigned int COL_WIN = 3;
 constexpr unsigned int DIRECTIONS = 4;
 
 typedef std::array<std::array<char, COLS>, ROWS> BoardArray;
-typedef std::array<std::pair<int, int>, DIRECTIONS> Directions;
+typedef std::pair<int, int> Direction;
+typedef std::array<Direction, DIRECTIONS> Directions;
 
 void printBoard(const BoardArray& board) {
 	for (const auto& row : board) {
@@ -23,10 +24,17 @@ void printBoard(const BoardArray& board) {
 }
 
 Directions&& getDirections(const unsigned int row, const unsigned int col, const unsigned int delta) {
-	return {{{row - delta, col},
+	return { {{row - delta, col},
 			 {row + delta, col},
 			 {row, col - delta},
-			 {row, col + delta}}};
+			 {row, col + delta}} };
+}
+
+bool outOfBounds(const Direction& direction) {
+	return direction.first < 0 ||
+		   direction.first > MAX_ROW ||
+		   direction.second < 0 ||
+		   direction.second > MAX_COL;
 }
 
 bool doMoves(const BoardArray& board, const unsigned int jumpsToComplete) {
@@ -49,11 +57,7 @@ bool doMoves(const BoardArray& board, const unsigned int jumpsToComplete) {
 
 			// for every direction
 			for (int i = 0; i < DIRECTIONS; ++i) {
-				// skip if out of index range
-				if (jumpTos[i].first < 0 ||
-					jumpTos[i].first > MAX_ROW ||
-					jumpTos[i].second < 0 ||
-					jumpTos[i].second > MAX_COL) {
+				if (outOfBounds(jumpTos[i])) {
 					continue;
 				}
 
