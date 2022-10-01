@@ -1,4 +1,4 @@
-# A decorator to that stores results to avoid repeating expensive functions
+# A decorator to that caches results that are expensive to compute
 # (Only pratical for pure functions)
 def memoize(original_function):
     cache = {}
@@ -20,12 +20,4 @@ if __name__ == "__main__":
     def fib(n): 
         return n if n < 2 else fib(n - 1) + fib(n - 2)
 
-    @memoize
-    def factorial(n):
-        return n * factorial(n - 1) if n else 1
-
-    # for i in range(30):
-    #     print(fib(i))
     print(fib(32))
-
-
