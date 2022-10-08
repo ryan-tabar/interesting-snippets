@@ -1,4 +1,4 @@
-# A decorator to that caches results that are expensive to compute
+# A decorator that caches results to avoid expensive computations
 # (Only pratical for pure functions)
 def memoize(original_function):
     cache = {}
