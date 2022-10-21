@@ -21,6 +21,7 @@ int main()
 {
     reg.value = 24;
 
+    // prints "value:  24, size of reg.bits in bytes:  1"
     printf("value:  %d, size of reg.bits in bytes:  %d\n", 
     reg.value, 
     sizeof(reg.bits));
@@ -35,6 +36,7 @@ int main()
     reg.bits.b6 = 0;
     reg.bits.b7 = 1;
 
+    // prints "value: 157, size of reg.value in bytes: 1"
     printf("value: %d, size of reg.value in bytes: %d\n", 
     reg.value, 
     sizeof(reg.value));
